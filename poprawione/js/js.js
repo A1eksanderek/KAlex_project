@@ -1,66 +1,33 @@
-// Hamburger menu toggle
-const mobileToggle = document.getElementById('mobile-toggle');
-if (mobileToggle) {
-  mobileToggle.addEventListener('click', () => {
-    const navMenu = document.querySelector('nav ul');
-    navMenu.classList.toggle('active');
-    mobileToggle.classList.toggle('open');
-  });
+// Pobranie elementu formularza o ID "contactForm"
+let form = document.getElementById("contactForm");
 
-  // Close menu on nav item click (mobile)
-  document.querySelectorAll('nav ul li a').forEach(link => {
-    link.addEventListener('click', () => {
-      document.querySelector('nav ul').classList.remove('active');
-      mobileToggle.classList.remove('open');
-    });
-  });
-}
-
-// Contact form validation & feedback
-const contactForm = document.getElementById('contactForm');
-if (contactForm) {
-  contactForm.addEventListener('submit', function (e) {
+// Sprawdzenie, czy formularz istnieje na stronie
+if (form) {
+  // Dodanie nasłuchiwania na zdarzenie "submit" (wysłanie formularza)
+  form.addEventListener("submit", function (e) {
+    // Zatrzymanie domyślnej akcji przeglądarki (czyli faktycznego wysłania formularza)
     e.preventDefault();
 
-    const name = document.getElementById('name');
-    const email = document.getElementById('email');
-    const message = document.getElementById('message');
-    const status = document.getElementById('form-status');
+    // Pobranie i usunięcie białych znaków z pola "name"
+    let imie = document.getElementById("name").value.trim();
 
-    const nameVal = name.value.trim();
-    const emailVal = email.value.trim();
-    const messageVal = message.value.trim();
+    // Pobranie i usunięcie białych znaków z pola "email"
+    let mail = document.getElementById("email").value.trim();
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Pobranie i usunięcie białych znaków z pola "message"
+    let wiadomosc = document.getElementById("message").value.trim();
 
-    if (!nameVal || !emailVal || !messageVal) {
-      status.textContent = 'Wypełnij wszystkie pola.';
-      status.style.color = 'orange';
-      return;
-    }
+    // Pobranie elementu, w którym wyświetlany jest status formularza
+    let status = document.getElementById("form-status");
 
-    if (!emailRegex.test(emailVal)) {
-      status.textContent = 'Podaj poprawny adres e-mail.';
-      status.style.color = 'orange';
-      return;
-    }
+    // Pobranie przycisku "submit" znajdującego się wewnątrz formularza
+    let btn = form.querySelector("button[type='submit']");
 
-    // Lock form
-    const submitButton = contactForm.querySelector('button[type="submit"]');
-    submitButton.disabled = true;
-    status.textContent = 'Wysyłanie...';
-    status.style.color = '#fff';
+    form.reset();
 
+    // Upewnienie się, że przycisk submit nie jest zablokowany
+    btn.disabled = false;
+
+    // Po 5 sekundach wyczyszczenie komunikatu statusu
     setTimeout(() => {
-      status.textContent = 'Dziękujemy! Twoja wiadomość została wysłana.';
-      status.style.color = '#00ffc3';
-
-      contactForm.reset();
-      submitButton.disabled = false;
-
-      setTimeout(() => {
-        status.textContent = '';
-      }, 5000);
-    }, 1500);
-  });
-}
+      status.textContent = "";
